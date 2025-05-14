@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  nestjs-app:
+    build: .
+    container_name: nestjs-app
+    ports:
+      - "5007:5007"
+    depends_on:
+      - postgres
+    env_file:
+      - .env  
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      INITIAL_ADMIN_TOKEN: ${INITIAL_ADMIN_TOKEN}
+      JWT_SECRET: ${JWT_SECRET}
+      INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD}
+      GMAIL_USER: ${GMAIL_USER}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-db
+    ports:
+      - "5433:5432" 
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
